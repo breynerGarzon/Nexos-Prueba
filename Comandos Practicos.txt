@@ -1,0 +1,32 @@
+dotnet sln add ./WebApi/WebApi.csproj
+dotnet sln add ./WebApi.Negocio/WebApi.Negocio.csproj
+dotnet sln add ./WebApi.Datos/WebApi.Datos.csproj
+dotnet sln add ./WebApi.Modelo/WebApi.Modelo.csproj
+dotnet sln add ./WebApi.Migracion_SQL_Server/WebApi.Migracion_SQL_Server.csproj
+
+//Agregar refencia a un Proyecto
+dotnet add reference ../WebApi.Negocio/WebApi.Negocio.csproj
+dotnet add reference ../WebApi.Negocio/WebApi.Negocio.csproj
+
+dotnet add reference ../WebApi.Datos/WebApi.Datos.csproj    
+dotnet remove reference ../WebApi.Datos/WebApi.Datos.csproj    
+
+dotnet add reference ../WebApi.Modelo/WebApi.Modelo.csproj
+dotnet remove reference ../WebApi.Modelo/WebApi.Modelo.csproj
+
+dotnet add reference ../WebApi.Migracion_SQL_Server/WebApi.Migracion_SQL_Server.csproj 
+dotnet remove reference ../WebApi.Migracion_SQL_Server/WebApi.Migracion_SQL_Server.csproj 
+
+dotnet ef migrations add --context HospitalContexto --project ..\WebApi.Migracion_SQL_Server\WebApi.Migracion_SQL_Server.csproj CreacionBd
+
+
+//Agregar EntityFrameWork
+dotnet add package Microsoft.EntityFrameworkCore
+
+dotnet add package Microsoft.EntityFrameworkCore.SqlServer
+dotnet add package Microsoft.EntityFrameworkCore.Design
+dotnet add package Microsoft.EntityFrameworkCore
+dotnet add package Microsoft.AspNetCore.Identity.EntityFrameworkCore
+
+
+
