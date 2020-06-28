@@ -7,7 +7,7 @@ namespace WebApi.Migracion_SQL_Server.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Especialidad",
+                name: "Especialidades",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -20,7 +20,7 @@ namespace WebApi.Migracion_SQL_Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Hospital",
+                name: "Hospitales",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -33,7 +33,7 @@ namespace WebApi.Migracion_SQL_Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Paciente",
+                name: "Pacientes",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -50,7 +50,7 @@ namespace WebApi.Migracion_SQL_Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Doctor",
+                name: "Doctores",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -66,7 +66,7 @@ namespace WebApi.Migracion_SQL_Server.Migrations
                     table.ForeignKey(
                         name: "FK_Doctor_Hospital_HospitalId",
                         column: x => x.HospitalId,
-                        principalTable: "Hospital",
+                        principalTable: "Hospitales",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -84,13 +84,13 @@ namespace WebApi.Migracion_SQL_Server.Migrations
                     table.ForeignKey(
                         name: "FK_DoctoresEspecialidades_Doctor_DoctorId",
                         column: x => x.DoctorId,
-                        principalTable: "Doctor",
+                        principalTable: "Doctores",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_DoctoresEspecialidades_Especialidad_EspecialidadId",
                         column: x => x.EspecialidadId,
-                        principalTable: "Especialidad",
+                        principalTable: "Especialidades",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -108,19 +108,19 @@ namespace WebApi.Migracion_SQL_Server.Migrations
                     table.ForeignKey(
                         name: "FK_PacientesDoctores_Doctor_DoctorId",
                         column: x => x.DoctorId,
-                        principalTable: "Doctor",
+                        principalTable: "Doctores",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_PacientesDoctores_Paciente_PacienteId",
                         column: x => x.PacienteId,
-                        principalTable: "Paciente",
+                        principalTable: "Pacientes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
-                table: "Especialidad",
+                table: "Especialidades",
                 columns: new[] { "Id", "Nombre" },
                 values: new object[,]
                 {
@@ -131,7 +131,7 @@ namespace WebApi.Migracion_SQL_Server.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Hospital",
+                table: "Hospitales",
                 columns: new[] { "Id", "Nombre" },
                 values: new object[,]
                 {
@@ -141,7 +141,7 @@ namespace WebApi.Migracion_SQL_Server.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Paciente",
+                table: "Pacientes",
                 columns: new[] { "Id", "Apellidos", "CodigoPostal", "Nombres", "SeguroSocial", "Telefono" },
                 values: new object[,]
                 {
@@ -160,7 +160,7 @@ namespace WebApi.Migracion_SQL_Server.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Doctor",
+                table: "Doctores",
                 columns: new[] { "Id", "Apellidos", "HospitalId", "Nombres", "NumeroCredencial" },
                 values: new object[,]
                 {
@@ -180,7 +180,7 @@ namespace WebApi.Migracion_SQL_Server.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_Doctor_HospitalId",
-                table: "Doctor",
+                table: "Doctores",
                 column: "HospitalId");
 
             migrationBuilder.CreateIndex(
@@ -203,16 +203,16 @@ namespace WebApi.Migracion_SQL_Server.Migrations
                 name: "PacientesDoctores");
 
             migrationBuilder.DropTable(
-                name: "Especialidad");
+                name: "Especialidades");
 
             migrationBuilder.DropTable(
-                name: "Doctor");
+                name: "Doctores");
 
             migrationBuilder.DropTable(
-                name: "Paciente");
+                name: "Pacientes");
 
             migrationBuilder.DropTable(
-                name: "Hospital");
+                name: "Hospitales");
         }
     }
 }

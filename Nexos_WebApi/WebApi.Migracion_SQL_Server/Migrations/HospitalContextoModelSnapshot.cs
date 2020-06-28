@@ -28,6 +28,9 @@ namespace WebApi.Migracion_SQL_Server.Migrations
                     b.Property<string>("Apellidos")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Direccion")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("HospitalId")
                         .HasColumnType("int");
 
@@ -41,7 +44,7 @@ namespace WebApi.Migracion_SQL_Server.Migrations
 
                     b.HasIndex("HospitalId");
 
-                    b.ToTable("Doctor");
+                    b.ToTable("Doctores");
 
                     b.HasData(
                         new
@@ -266,7 +269,7 @@ namespace WebApi.Migracion_SQL_Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Especialidad");
+                    b.ToTable("Especialidades");
 
                     b.HasData(
                         new
@@ -303,7 +306,7 @@ namespace WebApi.Migracion_SQL_Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Hospital");
+                    b.ToTable("Hospitales");
 
                     b.HasData(
                         new
@@ -347,7 +350,7 @@ namespace WebApi.Migracion_SQL_Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Paciente");
+                    b.ToTable("Pacientes");
 
                     b.HasData(
                         new

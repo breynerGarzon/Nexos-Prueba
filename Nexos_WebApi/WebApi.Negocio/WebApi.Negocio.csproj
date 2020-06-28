@@ -3,6 +3,7 @@
   <ItemGroup>
     <ProjectReference Include="..\WebApi.Modelo\WebApi.Modelo.csproj" />
     <ProjectReference Include="..\WebApi.Datos\WebApi.Datos.csproj" />
+    <ProjectReference Include="..\WebApi.Utilitario\WebApi.Utilitario.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

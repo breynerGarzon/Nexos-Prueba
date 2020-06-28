@@ -7,9 +7,9 @@ namespace WebApi.Datos.Contexto
     public class HospitalContexto : DbContext
     {
         public DbSet<Doctor> Doctores { get; set; }
-        public DbSet<Doctor> Pacientes { get; set; }
-        public DbSet<Doctor> Hospitales { get; set; }
-        public DbSet<Doctor> Especialidades { get; set; }
+        public DbSet<Paciente> Pacientes { get; set; }
+        public DbSet<Hospital> Hospitales { get; set; }
+        public DbSet<Especialidad> Especialidades { get; set; }
         public DbSet<PacientesDoctores> PacientesDoctores { get; set; }
         public DbSet<DoctoresEspecialidades> DoctoresEspecialidades { get; set; }
         

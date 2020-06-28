@@ -12,6 +12,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using WebApi.Datos.Contexto;
+using WebApi.Datos.Interface;
+using WebApi.Datos.Servicio;
+using WebApi.Negocio.Interface;
+using WebApi.Negocio.Servicio;
 
 namespace WebApi
 {
@@ -30,6 +34,10 @@ namespace WebApi
             var sqlConnectionString = Configuration.GetConnectionString("CadenaConexion");
             services.AddDbContext<HospitalContexto>(options => options.UseSqlServer(sqlConnectionString, option => option.MigrationsAssembly("WebApi.Migracion_SQL_Server")));
             services.AddControllers();
+            services.AddTransient<IServiciosDatosDoctor,ServicioDatosDoctor>();
+            services.AddTransient<IServiciosDatosPacientes,ServiciosDatosPacientes>();
+            services.AddTransient<IServiciosDoctores,ServicioNegocioDoctor>();
+            services.AddTransient<IServiciosPacientes, ServicioNegocioPacientes>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -40,7 +48,7 @@ namespace WebApi
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
 
             app.UseRouting();
 

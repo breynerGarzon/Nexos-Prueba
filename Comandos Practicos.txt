@@ -3,6 +3,7 @@ dotnet sln add ./WebApi.Negocio/WebApi.Negocio.csproj
 dotnet sln add ./WebApi.Datos/WebApi.Datos.csproj
 dotnet sln add ./WebApi.Modelo/WebApi.Modelo.csproj
 dotnet sln add ./WebApi.Migracion_SQL_Server/WebApi.Migracion_SQL_Server.csproj
+dotnet sln add ./WebApi.Utilitario/WebApi.Utilitario.csproj
 
 //Agregar refencia a un Proyecto
 dotnet add reference ../WebApi.Negocio/WebApi.Negocio.csproj
@@ -13,6 +14,9 @@ dotnet remove reference ../WebApi.Datos/WebApi.Datos.csproj
 
 dotnet add reference ../WebApi.Modelo/WebApi.Modelo.csproj
 dotnet remove reference ../WebApi.Modelo/WebApi.Modelo.csproj
+
+dotnet add reference ../WebApi.Utilitario/WebApi.Utilitario.csproj
+dotnet remove reference ../WebApi.Utilitario/WebApi.Utilitario.csproj
 
 dotnet add reference ../WebApi.Migracion_SQL_Server/WebApi.Migracion_SQL_Server.csproj 
 dotnet remove reference ../WebApi.Migracion_SQL_Server/WebApi.Migracion_SQL_Server.csproj 

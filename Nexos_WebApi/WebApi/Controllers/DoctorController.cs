@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using WebApi.Modelo.Modelos;
+using WebApi.Negocio.Interface;
 
 namespace WebApi.Controllers
 {
@@ -11,29 +13,42 @@ namespace WebApi.Controllers
     [Route("[controller]")]
     public class DoctorController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
-
         private readonly ILogger<WeatherForecastController> _logger;
+        private readonly IServiciosDoctores ServicioDoctores;
 
-        public DoctorController(ILogger<WeatherForecastController> logger)
+        public DoctorController(ILogger<WeatherForecastController> logger, IServiciosDoctores servicioDoctores)
         {
+            this.ServicioDoctores = servicioDoctores;
             _logger = logger;
         }
 
-        [HttpGet]
-        public IEnumerable<WeatherForecast> Get()
+        [HttpPost("AgregarDoctor")]
+        public JsonResult CrearPaciente([FromBody] View_Doctor nuevoPaciente)
         {
-            var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
-            })
-            .ToArray();
+            return new JsonResult(this.ServicioDoctores.CrearDoctor(nuevoPaciente)) { StatusCode = 200 };
+        }
+
+        [HttpPut("EditarDoctor")]
+        public JsonResult EditarPaciente([FromBody] View_Doctor editarPaciente)
+        {
+            return new JsonResult(this.ServicioDoctores.EditarDoctor(editarPaciente)) { StatusCode = 200 };
+        }
+
+        [HttpDelete("EliminarDoctor/{IdDoctor}")]
+        public JsonResult EliminarPaciente(int IdDoctor)
+        {
+            return new JsonResult(this.ServicioDoctores.EliminarDoctor(IdDoctor)) { StatusCode = 200 };
+        }
+
+        [HttpGet("ObtenerDoctor/{IdDoctor}")]
+        public JsonResult ConsultarPacientePorId(int IdDoctor)
+        {
+            return new JsonResult(this.ServicioDoctores.ConsultarDoctorPorId(IdDoctor)) { StatusCode = 200 };
+        }
+        [HttpGet("ObtenerDoctores")]
+        public JsonResult ConsultarPacientes()
+        {
+            return new JsonResult(this.ServicioDoctores.ConsultarDoctores()) { StatusCode = 200 };
         }
     }
 }
