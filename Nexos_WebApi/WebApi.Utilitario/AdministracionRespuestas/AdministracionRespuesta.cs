@@ -7,12 +7,12 @@ namespace WebApi.Utilitario.AdministracionRespuestas
 {
     public static class AdministracionRespuesta
     {
-        public static ModeloRespuesta<string> CreacionExitosa_Ok(string Mensaje)
+        public static ModeloRespuesta<int> CreacionExitosa_Ok(int IdregistroCreado)
         {
-            var respuesta = new ModeloRespuesta<string>();
+            var respuesta = new ModeloRespuesta<int>();
             respuesta.StatusCode = HttpStatusCode.Created;
-            respuesta.Message = Mensaje;
-            respuesta.Objeto = null;
+            respuesta.Message = null;
+            respuesta.Objeto = IdregistroCreado;
             respuesta.Data = null;
             return respuesta;
         }
@@ -39,9 +39,9 @@ namespace WebApi.Utilitario.AdministracionRespuestas
         }
 
 
-        public static ModeloRespuesta<string> FinalizacionActividad_Exitosa(string Mensaje)
+        public static ModeloRespuesta<int> FinalizacionActividad_Exitosa(int Mensaje)
         {
-            var respuesta = new ModeloRespuesta<string>();
+            var respuesta = new ModeloRespuesta<int>();
             respuesta.StatusCode = HttpStatusCode.OK;
             respuesta.Message = null;
             respuesta.Objeto = Mensaje;
@@ -49,12 +49,12 @@ namespace WebApi.Utilitario.AdministracionRespuestas
             return respuesta;
         }
 
-        public static ModeloRespuesta<string> FinalizacionActividad_Fallida(string Mensaje)
+        public static ModeloRespuesta<int> FinalizacionActividad_Fallida(string Mensaje)
         {
-            var respuesta = new ModeloRespuesta<string>();
+            var respuesta = new ModeloRespuesta<int>();
             respuesta.StatusCode = HttpStatusCode.BadRequest;
-            respuesta.Message = null;
-            respuesta.Objeto = Mensaje;
+            respuesta.Message = Mensaje;
+            respuesta.Objeto = 0;
             respuesta.Data = null;
             return respuesta;
         }
@@ -69,12 +69,12 @@ namespace WebApi.Utilitario.AdministracionRespuestas
             return respuesta;
         }
 
-        public static ModeloRespuesta<string> InternalError(string Mensaje)
+        public static ModeloRespuesta<int> InternalError(string Mensaje)
         {
-            var respuesta = new ModeloRespuesta<string>();
+            var respuesta = new ModeloRespuesta<int>();
             respuesta.StatusCode = HttpStatusCode.InternalServerError;
             respuesta.Message = Mensaje;
-            respuesta.Objeto = null;
+            respuesta.Objeto = 0;
             respuesta.Data = null;
             return respuesta;
         }
@@ -160,12 +160,21 @@ namespace WebApi.Utilitario.AdministracionRespuestas
             return respuesta;
         }
 
-        public static ModeloRespuesta<string> DatosInvalidos_Badrequest(string mensaje)
+        public static ModeloRespuesta<int> Consulta_Datos_Invalidos(string mensaje)
         {
-            var respuesta = new ModeloRespuesta<string>();
+            var respuesta = new ModeloRespuesta<int>();
             respuesta.StatusCode = HttpStatusCode.BadRequest;
             respuesta.Message = mensaje;
-            respuesta.Objeto = null;
+            respuesta.Objeto = 0;
+            respuesta.Data = null;
+            return respuesta;
+        }
+        public static ModeloRespuesta<int> DatosInvalidos_Badrequest(string mensaje)
+        {
+            var respuesta = new ModeloRespuesta<int>();
+            respuesta.StatusCode = HttpStatusCode.BadRequest;
+            respuesta.Message = mensaje;
+            respuesta.Objeto = 0;
             respuesta.Data = null;
             return respuesta;
         }
@@ -247,6 +256,37 @@ namespace WebApi.Utilitario.AdministracionRespuestas
             respuesta.Message = null;
             respuesta.Objeto = null;
             respuesta.Data = doctores;
+            return respuesta;
+        }
+
+
+        public static ModeloRespuesta<ViewDoctorPaciente> Consulta_Ok(List<ViewDoctorPaciente> doctoresAs)
+        {
+            var respuesta = new ModeloRespuesta<ViewDoctorPaciente>();
+            respuesta.StatusCode = HttpStatusCode.OK;
+            respuesta.Message = null;
+            respuesta.Objeto = null;
+            respuesta.Data = doctoresAs;
+            return respuesta;
+        }
+
+        public static ModeloRespuesta<ViewDoctorPaciente> Consulta_NOFOUND(string mensaje)
+        {
+            var respuesta = new ModeloRespuesta<ViewDoctorPaciente>();
+            respuesta.StatusCode = HttpStatusCode.NotFound;
+            respuesta.Message = mensaje;
+            respuesta.Objeto = null;
+            respuesta.Data = null;
+            return respuesta;
+        }
+
+        public static ModeloRespuesta<ViewDoctorPaciente> Consulta_INTERNAL_SERVER(string mensaje)
+        {
+            var respuesta = new ModeloRespuesta<ViewDoctorPaciente>();
+            respuesta.StatusCode = HttpStatusCode.InternalServerError;
+            respuesta.Message = mensaje;
+            respuesta.Objeto = null;
+            respuesta.Data = null;
             return respuesta;
         }
     }

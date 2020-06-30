@@ -76,7 +76,7 @@ namespace WebApi.Negocio.Servicio
             }
         }
 
-        public ModeloRespuesta<string> CrearPaciente(View_Paciente nuevoPaciente)
+        public ModeloRespuesta<int> CrearPaciente(View_Paciente nuevoPaciente)
         {
             try
             {
@@ -93,7 +93,7 @@ namespace WebApi.Negocio.Servicio
             }
         }
 
-        public ModeloRespuesta<string> EditarPaciente(View_Paciente nuevoPaciente)
+        public ModeloRespuesta<int> EditarPaciente(View_Paciente nuevoPaciente)
         {
             try
             {
@@ -110,7 +110,7 @@ namespace WebApi.Negocio.Servicio
             }
         }
 
-        public ModeloRespuesta<string> EliminarPaciente(int IdPaciente)
+        public ModeloRespuesta<int> EliminarPaciente(int IdPaciente)
         {
             try
             {
@@ -157,6 +157,44 @@ namespace WebApi.Negocio.Servicio
             catch (ValidacionException ex)
             {
                 return AdministracionRespuesta.Consulta_Paciente_NoHayDatos_NoRegistra(ex.Message);
+            }
+        }
+
+        public ModeloRespuesta<int> ActualizarRelacionDoctorPaciente(ViewDoctorPaciente SolicitudActualizacion)
+        {
+            try
+            {
+                if (SolicitudActualizacion.Agregar)
+                {
+                    return this.ServiciosDatosPacientes.AgregarRelacionDoctorPaciente(ValidarRelacionDoctorPaciente(SolicitudActualizacion));
+                }
+                else
+                {
+                    return this.ServiciosDatosPacientes.RemoverRelacionDoctorPaciente(ValidarRelacionDoctorPaciente(SolicitudActualizacion));
+                }
+            }
+            catch (System.Exception ex)
+            {
+                return AdministracionRespuesta.Consulta_Datos_Invalidos(ex.Message);
+            }
+        }
+
+        private PacientesDoctores ValidarRelacionDoctorPaciente(ViewDoctorPaciente actualizacion)
+        {
+            Validar.ValidarCampoNumerico(actualizacion.DoctorId);
+            Validar.ValidarCampoNumerico(actualizacion.PacienteId);
+            return new PacientesDoctores() { DoctorId = actualizacion.DoctorId, PacienteId = actualizacion.PacienteId };
+        }
+
+        public ModeloRespuesta<ViewDoctorPaciente> ObtenerDoctoresAsignados(int IdPaciente)
+        {
+            try
+            {
+                return this.ServiciosDatosPacientes.ObtenerDoctorAsignados(IdPaciente);
+            }
+            catch (System.Exception ex)
+            {
+                return AdministracionRespuesta.Consulta_INTERNAL_SERVER(Mensajes_Doctores.INTERNAL_ERROR);
             }
         }
     }

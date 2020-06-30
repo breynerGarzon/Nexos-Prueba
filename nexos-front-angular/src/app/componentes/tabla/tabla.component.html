@@ -1,0 +1,24 @@
+<app-listadesplegable
+  [Nombre]="NombreDeplegable"
+  [ValorSeleccionado]="ObtenerDoctorSeleccionado"
+>
+</app-listadesplegable>
+<button
+  mat-raised-button
+  color="primary"
+  (click)="AsociarDoctor()"
+  disabled="{{ SeHaCreadoOEditado }}"
+>
+  Agregar
+</button>
+
+<div *ngFor="let campo of DatosMedico">
+  <h3>{{ campo.NombreDoctor }}</h3>
+  <button
+    mat-raised-button
+    color="accent"
+    (click)="RemoverAsociacion(campo.id)"
+  >
+    -
+  </button>
+</div>

@@ -1,0 +1,31 @@
+<h1>{{ TipoApertura }}</h1>
+<main>
+  <mat-card>
+    <mat-form-field class="example-full-width" *ngFor="let campo of Campos">
+      <input
+        matInput
+        placeholder="{{ campo.Descripcion }}"
+        type="{{ campo.Tipo }}"
+        (input)="CambioElemento($event)"
+        id="{{ campo.Descripcion }}"
+        value="{{ campo.Valor }}"
+      />
+    </mat-form-field>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="Guardar()"
+      disabled="{{ CamposInvalidos }}"
+    >
+      Guardar
+    </button>
+    <button mat-raised-button color="accent" (click)="CerrarComponente()">
+      Cerrar
+    </button>
+  </mat-card>
+</main>
+<main class="Doctores">
+  <mat-card>
+    <app-tabla [PacienteActual]="this.PacienteActual.id"></app-tabla>
+  </mat-card>
+</main>

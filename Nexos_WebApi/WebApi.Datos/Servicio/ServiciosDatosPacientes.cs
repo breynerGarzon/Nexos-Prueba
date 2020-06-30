@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Net;
+using Serilog.Core;
 using WebApi.Datos.Contexto;
 using WebApi.Datos.Interface;
 using WebApi.Modelo.Entidades;
@@ -12,11 +13,12 @@ namespace WebApi.Datos.Servicio
     public class ServiciosDatosPacientes : IServiciosDatosPacientes
     {
         private readonly HospitalContexto Contexto;
-
+        Logger Log;
         public ServiciosDatosPacientes(HospitalContexto contexto)
         {
             this.Contexto = contexto;
         }
+
 
         public ModeloRespuesta<Paciente> ConsultarPacientePorId(int IdPaciente)
         {
@@ -37,6 +39,7 @@ namespace WebApi.Datos.Servicio
             }
             catch (System.Exception ex)
             {
+                Log.Error("Error al consltar paciente por Id"+ex);
                 return AdministracionRespuesta.InternalErrorPacientes(Mensajes_Doctores.INTERNAL_ERROR);
             }
         }
@@ -50,11 +53,12 @@ namespace WebApi.Datos.Servicio
             }
             catch (System.Exception ex)
             {
+                Log.Error("Error al consultar pacientes, "+ex);
                 return AdministracionRespuesta.InternalErrorPacientes(Mensajes_Doctores.INTERNAL_ERROR);
             }
         }
 
-        public ModeloRespuesta<string> CrearPaciente(Paciente nuevoPaciente)
+        public ModeloRespuesta<int> CrearPaciente(Paciente nuevoPaciente)
         {
             try
             {
@@ -65,7 +69,7 @@ namespace WebApi.Datos.Servicio
                     if (registros > 0)
                     {
                         transaccion.Commit();
-                        return AdministracionRespuesta.CreacionExitosa_Ok(Mensajes_Doctores.CREACION_EXITOSA);
+                        return AdministracionRespuesta.CreacionExitosa_Ok(nuevoPaciente.Id);
                     }
                     else
                     {
@@ -76,11 +80,12 @@ namespace WebApi.Datos.Servicio
             }
             catch (System.Exception ex)
             {
+                Log.Error("Error al crear paciente, "+ex);
                 return AdministracionRespuesta.InternalError(Mensajes_Doctores.INTERNAL_ERROR);
             }
         }
 
-        public ModeloRespuesta<string> EditarPaciente(Paciente nuevoPaciente)
+        public ModeloRespuesta<int> EditarPaciente(Paciente nuevoPaciente)
         {
             try
             {
@@ -99,7 +104,7 @@ namespace WebApi.Datos.Servicio
                         if (registros > 0)
                         {
                             transaccion.Commit();
-                            return AdministracionRespuesta.FinalizacionActividad_Exitosa(Mensajes_Doctores.EDICION_EXITOSA);
+                            return AdministracionRespuesta.FinalizacionActividad_Exitosa(nuevoPaciente.Id);
                         }
                         else
                         {
@@ -112,11 +117,12 @@ namespace WebApi.Datos.Servicio
             }
             catch (System.Exception ex)
             {
+                Log.Error("Error al editar paciente, "+ex);
                 return AdministracionRespuesta.InternalError(Mensajes_Doctores.INTERNAL_ERROR);
             }
         }
 
-        public ModeloRespuesta<string> EliminarPaciente(int IdPaciente)
+        public ModeloRespuesta<int> EliminarPaciente(int IdPaciente)
         {
             try
             {
@@ -131,7 +137,7 @@ namespace WebApi.Datos.Servicio
                         if (registros > 0)
                         {
                             transaccion.Commit();
-                            return AdministracionRespuesta.FinalizacionActividad_Exitosa(Mensajes_Doctores.ELIMINACION_EXITOSA);
+                            return AdministracionRespuesta.FinalizacionActividad_Exitosa(IdPaciente);
                         }
                         else
                         {
@@ -144,7 +150,85 @@ namespace WebApi.Datos.Servicio
             }
             catch (System.Exception ex)
             {
+                Log.Error("Error al eliminar paciente, "+ex);
                 return AdministracionRespuesta.InternalError(Mensajes_Doctores.INTERNAL_ERROR);
+            }
+        }
+
+        public ModeloRespuesta<int> RemoverRelacionDoctorPaciente(PacientesDoctores relacion)
+        {
+            try
+            {
+                using (var transaccion = this.Contexto.Database.BeginTransaction())
+                {
+                    this.Contexto.PacientesDoctores.Remove(relacion);
+                    var registros = this.Contexto.SaveChanges();
+                    if (registros > 0)
+                    {
+                        transaccion.Commit();
+                        return AdministracionRespuesta.CreacionExitosa_Ok(relacion.DoctorId);
+                    }
+                    else
+                    {
+                        transaccion.Rollback();
+                        return AdministracionRespuesta.FinalizacionActividad_Fallida(Mensajes_Doctores.AGREGAR_RELACIÒN_FALLIDA);
+                    }
+                }
+            }
+            catch (System.Exception ex)
+            {
+                Log.Error("Error al remover el relacionamiento paciente - doctor, "+ex);
+                return AdministracionRespuesta.InternalError(Mensajes_Doctores.INTERNAL_ERROR);
+            }
+        }
+
+        public ModeloRespuesta<int> AgregarRelacionDoctorPaciente(PacientesDoctores relacion)
+        {
+            try
+            {
+                using (var transaccion = this.Contexto.Database.BeginTransaction())
+                {
+                    this.Contexto.PacientesDoctores.Add(relacion);
+                    var registros = this.Contexto.SaveChanges();
+                    if (registros > 0)
+                    {
+                        transaccion.Commit();
+                        return AdministracionRespuesta.CreacionExitosa_Ok(relacion.DoctorId);
+                    }
+                    else
+                    {
+                        transaccion.Rollback();
+                        return AdministracionRespuesta.FinalizacionActividad_Fallida(Mensajes_Doctores.AGREGAR_RELACIÒN_FALLIDA);
+                    }
+                }
+            }
+            catch (System.Exception ex)
+            {
+                Log.Error("Error al agregar el relacionamiento paciente - doctor, "+ex);
+                return AdministracionRespuesta.InternalError(Mensajes_Doctores.INTERNAL_ERROR);
+            }
+        }
+
+        public ModeloRespuesta<ViewDoctorPaciente> ObtenerDoctorAsignados(int IdPaciente)
+        {
+            try
+            {
+                var doctoresAsignados = this.Contexto.PacientesDoctores.Where(item => item.PacienteId == IdPaciente)
+                                                .Select(item => new ViewDoctorPaciente()
+                                                {
+                                                    DoctorId = item.DoctorId,
+                                                    PacienteId = item.PacienteId
+                                                }).ToList();
+                if (doctoresAsignados != null && doctoresAsignados.Count != 0)
+                {
+                    return AdministracionRespuesta.Consulta_Ok(doctoresAsignados);
+                }
+                return AdministracionRespuesta.Consulta_NOFOUND(Mensajes_Doctores.NO_HAY_DATOS);
+            }
+            catch (System.Exception ex)
+            {
+                Log.Error("Error al consultar los doctores asignados, "+ex);
+                return AdministracionRespuesta.Consulta_INTERNAL_SERVER(Mensajes_Doctores.INTERNAL_ERROR);
             }
         }
     }

@@ -1,0 +1,8 @@
+<mat-form-field>
+  <mat-label>{{Nombre}}</mat-label>
+  <mat-select  (selectionChange)="ComunicarCambio($event)">
+    <mat-option *ngFor="let item of Items" [value]="item.value">
+      {{ item.viewValue }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>

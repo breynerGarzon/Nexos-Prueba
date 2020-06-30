@@ -1,5 +1,7 @@
 using System.Linq;
 using System.Net;
+using Microsoft.Extensions.Logging;
+using Serilog.Core;
 using WebApi.Datos.Contexto;
 using WebApi.Datos.Interface;
 using WebApi.Modelo.Entidades;
@@ -12,6 +14,7 @@ namespace WebApi.Datos.Servicio
     public class ServicioDatosDoctor : IServiciosDatosDoctor
     {
         private readonly HospitalContexto Contexto;
+        Logger Log;
 
         public ServicioDatosDoctor(HospitalContexto contexto)
         {
@@ -26,6 +29,7 @@ namespace WebApi.Datos.Servicio
             }
             catch (System.Exception ex)
             {
+                Log.Error("Error al consultar los doctores , "+ex);
                 return AdministracionRespuesta.InternalErrorDoctor(Mensajes_Doctores.INTERNAL_ERROR);
             }
         }
@@ -46,13 +50,14 @@ namespace WebApi.Datos.Servicio
                     return AdministracionRespuesta.Consulta_Doctor_NoHayDatos_NoRegistra(Mensajes_Doctores.NO_EXISTE);
                 }
             }
-            catch (System.Exception)
+            catch (System.Exception ex)
             {
+                Log.Error("Error al consultar doctor por Id , "+ex);
                 return AdministracionRespuesta.InternalErrorDoctor(Mensajes_Doctores.INTERNAL_ERROR);
             }
         }
 
-        public ModeloRespuesta<string> CrearDoctor(Doctor nuevoDoctor)
+        public ModeloRespuesta<int> CrearDoctor(Doctor nuevoDoctor)
         {
             try
             {
@@ -63,7 +68,7 @@ namespace WebApi.Datos.Servicio
                     if (registros > 0)
                     {
                         transaccion.Commit();
-                        return AdministracionRespuesta.CreacionExitosa_Ok(Mensajes_Doctores.CREACION_EXITOSA);
+                        return AdministracionRespuesta.CreacionExitosa_Ok(nuevoDoctor.Id);
                     }
                     else
                     {
@@ -74,11 +79,12 @@ namespace WebApi.Datos.Servicio
             }
             catch (System.Exception ex)
             {
+                Log.Error("Error al crear doctor , "+ex);
                 return AdministracionRespuesta.InternalError(Mensajes_Doctores.INTERNAL_ERROR);
             }
         }
 
-        public ModeloRespuesta<string> EditarDoctor(Doctor editarPaciente)
+        public ModeloRespuesta<int> EditarDoctor(Doctor editarPaciente)
         {
             try
             {
@@ -96,7 +102,7 @@ namespace WebApi.Datos.Servicio
                         if (registros > 0)
                         {
                             transaccion.Commit();
-                            return AdministracionRespuesta.FinalizacionActividad_Exitosa(Mensajes_Doctores.EDICION_EXITOSA);
+                            return AdministracionRespuesta.FinalizacionActividad_Exitosa(editarPaciente.Id);
                         }
                         else
                         {
@@ -109,11 +115,12 @@ namespace WebApi.Datos.Servicio
             }
             catch (System.Exception ex)
             {
+                Log.Error("Error al editar doctor , "+ex);
                 return AdministracionRespuesta.InternalError(Mensajes_Doctores.INTERNAL_ERROR);
             }
         }
 
-        public ModeloRespuesta<string> EliminarDoctor(int IdDoctor)
+        public ModeloRespuesta<int> EliminarDoctor(int IdDoctor)
         {
             try
             {
@@ -128,7 +135,7 @@ namespace WebApi.Datos.Servicio
                         if (registros > 0)
                         {
                             transaccion.Commit();
-                            return AdministracionRespuesta.FinalizacionActividad_Exitosa(Mensajes_Doctores.ELIMINACION_EXITOSA);
+                            return AdministracionRespuesta.FinalizacionActividad_Exitosa(IdDoctor);
                         }
                         else
                         {
@@ -141,6 +148,7 @@ namespace WebApi.Datos.Servicio
             }
             catch (System.Exception ex)
             {
+                Log.Error("Error al eliminar doctor , "+ex);
                 return AdministracionRespuesta.InternalError(Mensajes_Doctores.INTERNAL_ERROR);
             }
         }

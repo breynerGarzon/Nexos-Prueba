@@ -14,13 +14,11 @@ namespace WebApi.Controllers
     [Route("[controller]")]
     public class PacienteController : ControllerBase
     {
-        // private readonly ILogger<WeatherForecastController> _logger;
         private readonly IServiciosPacientes ServicioDoctores;
 
         public PacienteController(IServiciosPacientes servicioDoctores)
         {
             this.ServicioDoctores = servicioDoctores;
-            // _logger = logger;
         }
 
         [HttpPost("AgregarPaciente")]
@@ -50,6 +48,18 @@ namespace WebApi.Controllers
         public JsonResult ConsultarPacientes()
         {
             return new JsonResult(this.ServicioDoctores.ConsultarPacientes()) { StatusCode = 200 };
+        }
+
+        [HttpPost("ActualizarDoctor")]
+        public JsonResult ConsultarPacientes([FromBody] ViewDoctorPaciente actualizacionMedico)
+        {
+            return new JsonResult(this.ServicioDoctores.ActualizarRelacionDoctorPaciente(actualizacionMedico)) { StatusCode = 200 };
+        }
+
+        [HttpGet("ObtenerDoctorAsignados/{IdPaciente}")]
+        public JsonResult ObtenerDoctoresAsignados(int IdPaciente)
+        {
+            return new JsonResult(this.ServicioDoctores.ObtenerDoctoresAsignados(IdPaciente)) { StatusCode = 200 };
         }
     }
 }

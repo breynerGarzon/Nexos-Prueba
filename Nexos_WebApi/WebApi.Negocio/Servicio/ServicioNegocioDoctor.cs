@@ -74,7 +74,7 @@ namespace WebApi.Negocio.Servicio
             }
         }
 
-        public ModeloRespuesta<string> CrearDoctor(View_Doctor nuevoDoctor)
+        public ModeloRespuesta<int> CrearDoctor(View_Doctor nuevoDoctor)
         {
             try
             {
@@ -91,7 +91,7 @@ namespace WebApi.Negocio.Servicio
             }
         }
 
-        public ModeloRespuesta<string> EditarDoctor(View_Doctor nuevoPaciente)
+        public ModeloRespuesta<int> EditarDoctor(View_Doctor nuevoPaciente)
         {
             try
             {
@@ -108,7 +108,7 @@ namespace WebApi.Negocio.Servicio
             }
         }
 
-        public ModeloRespuesta<string> EliminarDoctor(int IdPaciente)
+        public ModeloRespuesta<int> EliminarDoctor(int IdPaciente)
         {
             try
             {

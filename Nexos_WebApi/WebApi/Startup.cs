@@ -34,9 +34,9 @@ namespace WebApi
             var sqlConnectionString = Configuration.GetConnectionString("CadenaConexion");
             services.AddDbContext<HospitalContexto>(options => options.UseSqlServer(sqlConnectionString, option => option.MigrationsAssembly("WebApi.Migracion_SQL_Server")));
             services.AddControllers();
-            services.AddTransient<IServiciosDatosDoctor,ServicioDatosDoctor>();
-            services.AddTransient<IServiciosDatosPacientes,ServiciosDatosPacientes>();
-            services.AddTransient<IServiciosDoctores,ServicioNegocioDoctor>();
+            services.AddTransient<IServiciosDatosDoctor, ServicioDatosDoctor>();
+            services.AddTransient<IServiciosDatosPacientes, ServiciosDatosPacientes>();
+            services.AddTransient<IServiciosDoctores, ServicioNegocioDoctor>();
             services.AddTransient<IServiciosPacientes, ServicioNegocioPacientes>();
         }
 
@@ -47,7 +47,12 @@ namespace WebApi
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            app.UseCors(builder => builder
+                    .AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    // .AllowCredentials()
+            );
             // app.UseHttpsRedirection();
 
             app.UseRouting();
